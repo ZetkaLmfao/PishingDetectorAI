@@ -1,4 +1,4 @@
-# DetectorURL
+# PishingDetectorURL
 
 Phishing detection app based on machine learning (Perceptron) with a Tkinter UI. The project analyzes URLs, extracts dozens of features, and classifies them as legitimate or phishing.
 
