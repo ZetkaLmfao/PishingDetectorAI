@@ -382,8 +382,7 @@ def analyze_url():
 
     history.append({
         "url": url,
-        "prediction": prediction,
-        "https": features[3]
+        "prediction": prediction
     })
     
     save_to_csv(url, prediction)
@@ -403,40 +402,16 @@ def open_dashboard():
 
     phishing = sum(1 for h in history if h["prediction"] == 1)
     legit = sum(1 for h in history if h["prediction"] == 0)
-    https_count = sum(1 for h in history if h["https"] == 1)
-    http_count = len(history) - https_count
-
-    plt.figure(figsize=(15, 8), num="Dashboard de Análise de URLs - Deteção de Phishing")
+    plt.figure(figsize=(12, 6), num="Dashboard de Análise de URLs - Deteção de Phishing")
     plt.style.use('seaborn-v0_8-darkgrid')
 
-    plt.subplot(2, 2, 1)
+    plt.subplot(1, 2, 1)
     colors = ['#2ecc71', '#e74c3c']
     plt.pie([legit, phishing], labels=["Legítimas", "Phishing"], 
             autopct='%1.1f%%', colors=colors, startangle=90)
     plt.title("Distribuição: Legítimas vs Phishing", fontweight='bold')
 
-    plt.subplot(2, 2, 2)
-    bars = plt.bar(["HTTPS", "HTTP"], [https_count, http_count], 
-                   color=['#3498db', '#e67e22'])
-    plt.title("Protocolo Utilizado", fontweight='bold')
-    plt.ylabel("Quantidade")
-    for bar in bars:
-        height = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width()/2., height,
-                f'{int(height)}', ha='center', va='bottom')
-
-    plt.subplot(2, 2, 3)
-    timeline = list(range(1, len(history) + 1))
-    phishing_timeline = [1 if h["prediction"] == 1 else 0 for h in history]
-    plt.plot(timeline, phishing_timeline, marker='o', linestyle='-', 
-             color='#e74c3c', linewidth=2, markersize=6)
-    plt.title("Timeline de Detecções", fontweight='bold')
-    plt.xlabel("Análise #")
-    plt.ylabel("Phishing (1) / Legítima (0)")
-    plt.ylim(-0.1, 1.1)
-    plt.grid(True, alpha=0.3)
-
-    plt.subplot(2, 2, 4)
+    plt.subplot(1, 2, 2)
     x = ['Legítimas', 'Phishing']
     y = [legit, phishing]
     bars = plt.bar(x, y, color=['#2ecc71', '#e74c3c'], alpha=0.7, edgecolor='black')
